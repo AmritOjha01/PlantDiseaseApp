@@ -17,17 +17,19 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    String selection;
-    AutoCompleteTextView stageDropDown, partTextField, leafTextField, rateTextField;
-    ImageView imageStageDrpdown, imgPartDropDown, imgLeafDropDown, imgRateDropDown;
-    LinearLayout layoutStage, layoutPart, layoutLeaf, layoutRate;
-    ImageView mCamera;
+    private String selection;
+    private AutoCompleteTextView stageDropDown, partTextField, leafTextField, rateTextField;
+    private ImageView imageStageDrpdown, imgPartDropDown, imgLeafDropDown, imgRateDropDown;
+    private LinearLayout layoutStage, layoutPart, layoutLeaf, layoutRate;
+    private ImageView mCamera;
+    private Button mSaveBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_home) {
-            Toast.makeText(MainActivity.this, "Home", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_gallery) {
             Intent intent = new Intent(MainActivity.this, ContactActivity.class);
             startActivity(intent);
@@ -130,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutRate = findViewById(R.id.editRate);
 
         mCamera = findViewById(R.id.imageCamera);
+        mSaveBtn = findViewById(R.id.buttonSave);
 
     }
 
@@ -194,6 +198,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "Camera Functionality", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "All fields Required !", Toast.LENGTH_SHORT).show();
             }
         });
 
