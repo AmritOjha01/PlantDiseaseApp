@@ -1,17 +1,29 @@
 package com.example.navigation;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,13 +36,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private static final int GALLERY_REQUEST_CODE = 101;
+    private static final int CAMERA_REQUEST_CODE = 102;
+    private String pathToFile;
 
     private String selection;
     private AutoCompleteTextView stageDropDown, partTextField, leafTextField, rateTextField;
     private ImageView imageStageDrpdown, imgPartDropDown, imgLeafDropDown, imgRateDropDown;
     private LinearLayout layoutStage, layoutPart, layoutLeaf, layoutRate;
-    private ImageView mCamera;
+    private ImageView mCamera, imageTomato;
     private Button mSaveBtn;
 
     @Override
@@ -55,9 +77,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
+        if (Build.VERSION.SDK_INT >= 23) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERA_REQUEST_CODE);
+        }
+
         init();
         showDropDown();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -136,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mCamera = findViewById(R.id.imageCamera);
         mSaveBtn = findViewById(R.id.buttonSave);
+        imageTomato = findViewById(R.id.imageTomato);
 
     }
 
@@ -233,20 +261,81 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface arg0, int arg1) {
-                        Toast.makeText(MainActivity.this, "Camera Triggered !", Toast.LENGTH_LONG).show();
+                        captureFromCamera();
                     }
                 });
 
         alertDialogBuilder.setNegativeButton("GALLERY",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(MainActivity.this, "Gallery Triggered !", Toast.LENGTH_SHORT).show();
+                        pickFromGallery();
                     }
                 });
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
+
+    private void pickFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        String[] mimeTypes = {"image/jpeg", "image/png"};
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+        startActivityForResult(intent, GALLERY_REQUEST_CODE);
+    }
+
+    private void captureFromCamera() {
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePicture.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            photoFile = createPhotoFile();
+
+            if (photoFile != null) {
+                pathToFile = photoFile.getAbsolutePath();
+                Uri photoURI = FileProvider.getUriForFile(MainActivity.this, "com.example.navigation.fileprovider", photoFile);
+                takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePicture, CAMERA_REQUEST_CODE);
+            }
+
+
+        }
+    }
+
+    private File createPhotoFile() {
+        String name = new SimpleDateFormat("yyyyMMdd HHmmss").format(new Date());
+        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(name, ".jpg", storageDir);
+        } catch (IOException e) {
+            Log.d("mylog", "Excep : " + e.toString());
+        }
+        return image;
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case GALLERY_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = data.getData();
+                    imageTomato.setImageURI(selectedImage);
+                }
+
+                break;
+            case CAMERA_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    /*Uri selectedImage = data.getData();
+                    imageTomato.setImageURI(selectedImage);*/
+                    Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
+                    imageTomato.setImageBitmap(bitmap);
+                }
+                break;
+        }
+    }
+
 
     private void onClickDropDown() {
 
@@ -306,6 +395,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == CAMERA_REQUEST_CODE) {
+
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
+
+            } else {
+
+                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+
+            }
+
+        }
     }
 }
 
