@@ -322,8 +322,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Uri selectedImage = data.getData();
                     imageTomato.setImageURI(selectedImage);
                 }
-
                 break;
+
             case CAMERA_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
@@ -394,7 +394,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_REQUEST_CODE) {
@@ -410,6 +410,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         }
-    }
+    }*/
 }
 
