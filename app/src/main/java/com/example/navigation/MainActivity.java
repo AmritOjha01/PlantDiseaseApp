@@ -297,7 +297,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(takePicture, CAMERA_REQUEST_CODE);
             }
 
-
         }
     }
 
@@ -327,8 +326,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case CAMERA_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
-                    /*Uri selectedImage = data.getData();
-                    imageTomato.setImageURI(selectedImage);*/
                     Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
                     imageTomato.setImageBitmap(bitmap);
                 }
