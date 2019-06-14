@@ -1,5 +1,6 @@
 package com.example.navigation;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +9,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -197,7 +199,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "Camera Functionality", Toast.LENGTH_SHORT).show();
+                cameraOptionDialogue(v);
             }
         });
 
@@ -222,6 +224,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         onClickDropDown();
 
 
+    }
+
+    private void cameraOptionDialogue(View view) {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Choose Photo Options");
+        alertDialogBuilder.setPositiveButton("CAMERA",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Toast.makeText(MainActivity.this, "Camera Triggered !", Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton("GALLERY",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(MainActivity.this, "Gallery Triggered !", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 
     private void onClickDropDown() {
