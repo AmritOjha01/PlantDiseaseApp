@@ -3,7 +3,6 @@ package com.example.navigation;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -11,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -22,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -34,12 +33,22 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.navigation.adapter.HomeActivityAdapter;
+import com.example.navigation.model.SaveInfo;
+import com.example.navigation.resrhelper.RestClient;
+import com.example.navigation.resrhelper.RetroInterfaceAPI;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -49,11 +58,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String pathToFile;
 
     private String selection;
-    private AutoCompleteTextView stageDropDown, partTextField, leafTextField, rateTextField;
+    private AutoCompleteTextView mStage, mPart, mLeaf, mRate;
     private ImageView imageStageDrpdown, imgPartDropDown, imgLeafDropDown, imgRateDropDown;
     private LinearLayout layoutStage, layoutPart, layoutLeaf, layoutRate;
     private ImageView mCamera, imageTomato;
     private Button mSaveBtn;
+    private TextView mTemp, mHumdity, mLabel, mDate, mFarm, mLocation, mComment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,10 +156,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void init() {
-        stageDropDown = findViewById(R.id.dpStage);
-        partTextField = findViewById(R.id.dpPart);
-        leafTextField = findViewById(R.id.dpLeaf);
-        rateTextField = findViewById(R.id.dpRate);
+
+
+        mTemp = findViewById(R.id.editTemp);
+        mHumdity = findViewById(R.id.editHumidity);
+        mLabel = findViewById(R.id.editLabel);
+        mDate = findViewById(R.id.editDate);
+        mFarm = findViewById(R.id.editFarm);
+        mLocation = findViewById(R.id.editLocation);
+        mComment = findViewById(R.id.editComment);
+
+
+        mStage = findViewById(R.id.dpStage);
+        mPart = findViewById(R.id.dpPart);
+        mLeaf = findViewById(R.id.dpLeaf);
+        mRate = findViewById(R.id.dpRate);
 
         imageStageDrpdown = findViewById(R.id.stageDrpdown);
         imgPartDropDown = findViewById(R.id.partDropdown);
@@ -164,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCamera = findViewById(R.id.imageCamera);
         mSaveBtn = findViewById(R.id.buttonSave);
         imageTomato = findViewById(R.id.imageTomato);
+
+        callRetrofitSaveInfo();
 
     }
 
@@ -185,40 +208,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this, android.R.layout.simple_spinner_dropdown_item, getResources()
                 .getStringArray(R.array.Rate));
 
-        stageDropDown.setAdapter(arrayAdapterStage);
-        partTextField.setAdapter(arrayAdapterPart);
-        leafTextField.setAdapter(arrayAdapterLeaf);
-        rateTextField.setAdapter(arrayAdapterRate);
+        mStage.setAdapter(arrayAdapterStage);
+        mPart.setAdapter(arrayAdapterPart);
+        mLeaf.setAdapter(arrayAdapterLeaf);
+        mRate.setAdapter(arrayAdapterRate);
 
 
-        stageDropDown.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mStage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                stageDropDown.showDropDown();
+                mStage.showDropDown();
                 selection = (String) parent.getItemAtPosition(position);
 
             }
         });
 
-        partTextField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mPart.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                partTextField.showDropDown();
+                mPart.showDropDown();
                 selection = (String) parent.getItemAtPosition(position);
 
             }
         });
 
-        leafTextField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mLeaf.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                leafTextField.showDropDown();
+                mLeaf.showDropDown();
                 selection = (String) parent.getItemAtPosition(position);
 
             }
@@ -235,16 +258,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 //Toast.makeText(MainActivity.this, "All fields Required !", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this,HomeActivity.class));
+                startActivity(new Intent(MainActivity.this, HomeActivity.class));
             }
         });
 
-       /* rateTextField.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+       /* mRate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                rateTextField.showDropDown();
+                mRate.showDropDown();
                 selection = (String) parent.getItemAtPosition(position);
 
             }
@@ -344,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(final View arg0) {
                 //    HoursAgo.hideSoftKeyboard(MainActivity.this);
-                stageDropDown.showDropDown();
+                mStage.showDropDown();
 
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -359,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(final View arg0) {
                 //    HoursAgo.hideSoftKeyboard(MainActivity.this);
-                partTextField.showDropDown();
+                mPart.showDropDown();
 
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -373,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(final View arg0) {
                 //    HoursAgo.hideSoftKeyboard(MainActivity.this);
-                leafTextField.showDropDown();
+                mLeaf.showDropDown();
 
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -387,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(final View arg0) {
                 //HoursAgo.hideSoftKeyboard(MainActivity.this);
-                rateTextField.showDropDown();
+                mRate.showDropDown();
 
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -412,5 +435,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }*/
+
+
+    private void callRetrofitSaveInfo() {
+
+
+        RetroInterfaceAPI mInterface = RestClient.getClient();
+        Call<SaveInfo> call = mInterface.getSaveInfo(mLabel.getText().toString(),mStage.getText().toString(),mPart.getText().toString(),mLeaf.getText().toString(),mFarm.getText().toString(),mLocation.getText().toString(),null,mComment.getText().toString(),mTemp.getText().toString(),mHumdity.getText().toString(),mRate.getText().toString(),mDate.getText().toString());
+        call.enqueue(new Callback<SaveInfo>() {
+            @Override
+            public void onResponse(Call<SaveInfo> call, Response<SaveInfo> response) {
+               if (response.body()!=null){
+                   if (response.code()==200){
+                       Toast.makeText(MainActivity.this, "Saved Succesfully"), Toast.LENGTH_SHORT).show();
+
+                   }
+               }
+
+            }
+
+            @Override
+            public void onFailure(Call<SaveInfo> call, Throwable t) {
+
+            }
+        });
+
+
+    }
+
 }
 
