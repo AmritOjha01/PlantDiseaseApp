@@ -3,18 +3,29 @@ package com.example.navigation;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import com.example.navigation.adapter.HomeActivityAdapter;
+import com.example.navigation.model.PlantInfo;
+import com.example.navigation.resrhelper.RestClient;
+import com.example.navigation.resrhelper.RetroInterfaceAPI;
 import com.example.navigation.utils.Utils;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private RecyclerView recyclerView;
+    private List<PlantInfo> plantList = null;
+    PlantInfo pl;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -26,15 +37,51 @@ public class HomeActivity extends AppCompatActivity {
         Utils.toolbarConfiguration(toolbar, this);
 
         recyclerView = findViewById(R.id.recycleview);
-
+        callRetrofitShowJudges();
         setAdapter();
     }
 
-    public void setAdapter(){
-        HomeActivityAdapter homeActivityAdapter = new HomeActivityAdapter(this);
+    public void setAdapter() {
+      /*  HomeActivityAdapter homeActivityAdapter = new HomeActivityAdapter(this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(homeActivityAdapter);
+        recyclerView.setAdapter(homeActivityAdapter);*/
     }
+
+
+    private void callRetrofitShowJudges() {
+
+
+        RetroInterfaceAPI mInterface = RestClient.getClient();
+        Call<List<PlantInfo>> call = mInterface.getPlantInfo();
+        call.enqueue(new Callback<List<PlantInfo>>() {
+            @Override
+            public void onResponse(Call<List<PlantInfo>> call, Response<List<PlantInfo>> response) {
+                if (response.body() != null) {
+
+                    if (response.code() == 200) {
+                        plantList =  response.body();
+                        HomeActivityAdapter jjj = new HomeActivityAdapter(getApplicationContext(), plantList, HomeActivity.this);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        recyclerView.setAdapter(jjj);
+
+
+                    } else {
+
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<PlantInfo>> call, Throwable t) {
+
+            }
+        });
+
+
+
+    }
+
 }
