@@ -62,9 +62,9 @@ public class HomeActivity extends AppCompatActivity {
                     if (response.code() == 200) {
                         Log.d("getdata", "dataplant");
                         plantList = response.body();
-                        HomeActivityAdapter jjj = new HomeActivityAdapter(getApplicationContext(), plantList, HomeActivity.this);
+                        HomeActivityAdapter homeActivityAdapter = new HomeActivityAdapter(getApplicationContext(), plantList, HomeActivity.this);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                        recyclerView.setAdapter(jjj);
+                        recyclerView.setAdapter(homeActivityAdapter);
 
                     } else {
 

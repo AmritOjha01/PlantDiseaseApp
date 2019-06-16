@@ -8,7 +8,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 
-public class RestClient {
+public class  RestClient {
     private static RetroInterfaceAPI retroInterfaceAPI;
     private static final String URL="http://114.70.194.120:8000/api/plant/disease/";
 
