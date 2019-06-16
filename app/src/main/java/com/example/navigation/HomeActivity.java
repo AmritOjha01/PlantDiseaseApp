@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 
 import com.example.navigation.adapter.HomeActivityAdapter;
 import com.example.navigation.model.PlantInfo;
@@ -52,23 +53,20 @@ public class HomeActivity extends AppCompatActivity {
 
     private void callRetrofitShowJudges() {
 
-
         RetroInterfaceAPI mInterface = RestClient.getClient();
         Call<List<PlantInfo>> call = mInterface.getPlantInfo();
         call.enqueue(new Callback<List<PlantInfo>>() {
             @Override
             public void onResponse(Call<List<PlantInfo>> call, Response<List<PlantInfo>> response) {
                 if (response.body() != null) {
-
                     if (response.code() == 200) {
-                        plantList =  response.body();
+                        Log.d("getdata", "dataplant");
+                        plantList = response.body();
                         HomeActivityAdapter jjj = new HomeActivityAdapter(getApplicationContext(), plantList, HomeActivity.this);
                         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                         recyclerView.setAdapter(jjj);
 
-
                     } else {
-
 
                     }
                 }
@@ -79,8 +77,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
-
 
     }
 

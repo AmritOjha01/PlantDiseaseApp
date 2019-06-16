@@ -20,7 +20,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -36,8 +35,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.navigation.adapter.HomeActivityAdapter;
 import com.example.navigation.model.SaveInfo;
+import com.example.navigation.model.SaveResponse;
 import com.example.navigation.resrhelper.RestClient;
 import com.example.navigation.resrhelper.RetroInterfaceAPI;
 
@@ -186,7 +185,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSaveBtn = findViewById(R.id.buttonSave);
         imageTomato = findViewById(R.id.imageTomato);
 
-        callRetrofitSaveInfo();
+
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                callRetrofitSaveInfo();
+
+            }
+        });
+
 
     }
 
@@ -439,18 +446,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void callRetrofitSaveInfo() {
 
+        String label = mLabel.getText().toString().trim();
+        String stage = mStage.getText().toString();
+        String part = mPart.getText().toString();
+        String leaf = mLeaf.getText().toString();
+        String farm = mFarm.getText().toString();
+        String location = mLocation.getText().toString();
+        String image = null;
+        String comment = mComment.getText().toString();
+        String temp = mTemp.getText().toString();
+        String humidity = mHumdity.getText().toString();
+        String rate = mRate.getText().toString();
+        String date = mDate.getText().toString();
+
+        final SaveResponse saveResponse = new SaveResponse("hello", "early", "Top", "front", "yes", "korea", null, "test", "48", "11", "11", "2018-11-31");
 
         RetroInterfaceAPI mInterface = RestClient.getClient();
-        Call<SaveInfo> call = mInterface.getSaveInfo(mLabel.getText().toString(),mStage.getText().toString(),mPart.getText().toString(),mLeaf.getText().toString(),mFarm.getText().toString(),mLocation.getText().toString(),null,mComment.getText().toString(),mTemp.getText().toString(),mHumdity.getText().toString(),mRate.getText().toString(),mDate.getText().toString());
+      /*  Call<SaveInfo> call = mInterface.getSaveInfo(mLabel.getText().toString(),
+                mStage.getText().toString(),
+                mPart.getText().toString(),
+                mLeaf.getText().toString(),
+                mFarm.getText().toString(),
+                mLocation.getText().toString(),
+                null,
+                mComment.getText().toString(),
+                mTemp.getText().toString(),
+                mHumdity.getText().toString(),
+                mRate.getText().toString(),
+                mDate.getText().toString());*/
+
+        Call<SaveInfo> call = mInterface.getSaveInfo(saveResponse);
         call.enqueue(new Callback<SaveInfo>() {
             @Override
             public void onResponse(Call<SaveInfo> call, Response<SaveInfo> response) {
-               if (response.body()!=null){
-                   if (response.code()==200){
-                       Toast.makeText(MainActivity.this, "Saved Succesfully"), Toast.LENGTH_SHORT).show();
+                if (response.body() != null) {
+                    if (response.code() == 200) {
+                        Log.d("bbddbhhd", "chdbchddhdh");
+                        Toast.makeText(MainActivity.this, "Saved Successfully !", Toast.LENGTH_SHORT).show();
 
-                   }
-               }
+                    }
+                }
 
             }
 
@@ -459,7 +494,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
-
 
     }
 
