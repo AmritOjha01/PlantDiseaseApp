@@ -115,40 +115,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /**
-         * Inflate the menu; this adds items to the action bar if it is present.
-         *         getMenuInflater().inflate(R.menu.main, menu);
-         */
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /**
-         * Handle action bar item clicks here. The action bar will
-         * automatically handle clicks on the Home/Up button, so long
-         * as you specify a parent activity in AndroidManifest.xml.
-         */
-        int id = item.getItemId();
-
-        /**
-         * noinspection SimplifiableIfStatement
-         */
-       /* if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        /**
-         * Handle navigation view item clicks here.
-         */
         int id = item.getItemId();
-
         if (id == R.id.nav_home) {
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);
             startActivity(intent);
@@ -193,22 +171,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSaveBtn = findViewById(R.id.buttonSave);
         imageTomato = findViewById(R.id.imageTomato);
         datePicker = findViewById(R.id.datePicker);
-        progressbarEdit=findViewById(R.id.progressbarEdit);
+        progressbarEdit = findViewById(R.id.progressbarEdit);
         progressbarEdit.bringToFront();
 
 
-     /*   mSaveBtn.setOnClickListener(new View.OnClickListener() {
+        mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 callRetrofitSaveInfo();
 
             }
-        });*/
+        });
 
         datePicker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Get Current Date
                 Calendar mcurrentDate = Calendar.getInstance();
                 mYear = mcurrentDate.get(Calendar.YEAR);
                 mMonth = mcurrentDate.get(Calendar.MONTH);
@@ -229,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         mYear = selectedyear;
                     }
                 }, mYear, mMonth, mDay);
-                //mDatePicker.setTitle("Select date");
                 mDatePicker.show();
             }
         });
@@ -313,26 +289,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        mSaveBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                callRetrofitSaveInfo();
-                //startActivity(new Intent(MainActivity.this, HomeActivity.class));
-            }
-        });
-
-       /* mRate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                mRate.showDropDown();
-                selection = (String) parent.getItemAtPosition(position);
-            }
-        });*/
-
         onClickDropDown();
-
-
     }
 
 
@@ -424,7 +381,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutStage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                //    HoursAgo.hideSoftKeyboard(MainActivity.this);
                 mStage.showDropDown();
 
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -439,7 +395,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutPart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                //    HoursAgo.hideSoftKeyboard(MainActivity.this);
                 mPart.showDropDown();
 
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -453,7 +408,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutLeaf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                //    HoursAgo.hideSoftKeyboard(MainActivity.this);
                 mLeaf.showDropDown();
 
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -467,7 +421,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layoutRate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View arg0) {
-                //HoursAgo.hideSoftKeyboard(MainActivity.this);
                 mRate.showDropDown();
 
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -481,19 +434,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mLeaf.requestFocus();
     }
 
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == CAMERA_REQUEST_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
-            }
-        }
-    }*/
-
-
     private void callRetrofitSaveInfo() {
 
         String label = mLabel.getText().toString().trim();
@@ -505,12 +445,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String humidity = mHumdity.getText().toString();
         String date = mDate.getText().toString();
 
-
         final SaveResponse saveResponse = new SaveResponse(label, selectionStage, selectionPart, selectionLeaf, farm, location, null, comment, temp, humidity, seletionRate, date);
-        //final SaveResponse saveResponse = new SaveResponse("amrit", "early", "top", "frony", "yes", "korea", null, "shxhsxss", "11", "11", "11", "2018-11-31");
 
         RetroInterfaceAPI mInterface = RestClient.getClient();
-
 
         Call<SaveInfo> call = mInterface.getSaveInfo(saveResponse);
         call.enqueue(new Callback<SaveInfo>() {
@@ -518,17 +455,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onResponse(Call<SaveInfo> call, Response<SaveInfo> response) {
                 if (response.body() != null) {
                     if (response.code() == 200) {
-                        Toast.makeText(MainActivity.this, "saved", Toast.LENGTH_SHORT).show();
-                      startActivity(new Intent(MainActivity.this,HomeActivity.class));
+                        Toast.makeText(MainActivity.this, "Record Saved Successfully", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, HomeActivity.class));
 
                     }
                 }
-
             }
 
             @Override
             public void onFailure(Call<SaveInfo> call, Throwable t) {
-
 
             }
         });

@@ -35,7 +35,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity_plant_disease);
-        progressbar=findViewById(R.id.progressbar);
+        progressbar = findViewById(R.id.progressbar);
         progressbar.bringToFront();
 
         toolbar = findViewById(R.id.custom_toolbar);
@@ -44,17 +44,7 @@ public class HomeActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycleview);
         callRetrofitShowJudges();
-        setAdapter();
     }
-
-    public void setAdapter() {
-      /*  HomeActivityAdapter homeActivityAdapter = new HomeActivityAdapter(this);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(homeActivityAdapter);*/
-    }
-
 
     private void callRetrofitShowJudges() {
         progressbar.setVisibility(View.VISIBLE);
@@ -86,7 +76,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 }
