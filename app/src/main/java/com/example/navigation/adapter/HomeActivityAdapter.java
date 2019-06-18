@@ -3,6 +3,7 @@ package com.example.navigation.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,7 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
 
         holder.temp.setText(plantInfos.get(position).getTemperature());
         holder.humidity.setText(plantInfos.get(position).getHumidity());
+        Log.d("cdhcdhdhcdhd",plantInfos.get(position).getLabel());
 
 
         //  Glide.with(context).load(judgeData.getImage()).into(holder.imageView);

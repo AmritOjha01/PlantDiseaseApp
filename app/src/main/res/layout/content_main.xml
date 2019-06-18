@@ -100,6 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
+            android:inputType="number"
             android:background="@drawable/edit_text_background"
             android:paddingLeft="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -119,16 +120,30 @@
             app:layout_constraintTop_toBottomOf="@+id/editTemp"
             text_view:textStyle1="Regular" />
 
+        <ProgressBar
+        android:id="@+id/progressbarEdit"
+        android:layout_width="60dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvHumidity"
+        android:layout_height="60dp"
+        android:paddingLeft="4dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        />
+
         <EditText
             android:id="@+id/editHumidity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:background="@drawable/edit_text_background"
+            android:inputType="number"
             android:paddingLeft="4dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvHumidity" />
+            app:layout_constraintTop_toBottomOf="@+id/progressbarEdit" />
 
 
         <com.example.navigation.customcomponents.LatoTextView
@@ -142,6 +157,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editHumidity"
             text_view:textStyle1="Regular" />
+
+
 
         <EditText
             android:id="@+id/editLabel"
@@ -304,16 +321,41 @@
             app:layout_constraintTop_toBottomOf="@+id/layoutLeaf"
             text_view:textStyle1="Regular" />
 
+        <LinearLayout
+            android:id="@+id/editDateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/edit_text_background"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvDate"
+            >
+
         <EditText
             android:id="@+id/editDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:background="@drawable/edit_text_background"
+            android:layout_weight="1"
+            android:background="#00000000"
+            android:editable="false"
             android:paddingLeft="4dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvDate" />
+            android:textColor="@color/colorTextBold"
+            android:textColorHint="@color/colorTextBeforeWriting"
+            android:textSize="12sp"/>
+
+            <ImageView
+                android:id="@+id/datePicker"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="12dp"
+                android:src="@drawable/dropdowngrey" />
+
+
+        </LinearLayout>
 
         <com.example.navigation.customcomponents.LatoTextView
             android:id="@+id/tvFarm"
@@ -324,7 +366,7 @@
             android:textColor="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editDate"
+            app:layout_constraintTop_toBottomOf="@+id/editDateLayout"
             text_view:textStyle1="Regular" />
 
         <EditText

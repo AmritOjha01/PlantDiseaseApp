@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.navigation.adapter.HomeActivityAdapter;
 import com.example.navigation.model.PlantInfo;
@@ -25,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private List<PlantInfo> plantList = null;
+    ProgressBar progressbar;
     PlantInfo pl;
 
 
@@ -32,6 +35,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity_plant_disease);
+        progressbar=findViewById(R.id.progressbar);
+        progressbar.bringToFront();
 
         toolbar = findViewById(R.id.custom_toolbar);
         toolbar.setTitle("Plant disease");
@@ -52,6 +57,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private void callRetrofitShowJudges() {
+        progressbar.setVisibility(View.VISIBLE);
 
         RetroInterfaceAPI mInterface = RestClient.getClient();
         Call<List<PlantInfo>> call = mInterface.getPlantInfo();
@@ -60,6 +66,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(Call<List<PlantInfo>> call, Response<List<PlantInfo>> response) {
                 if (response.body() != null) {
                     if (response.code() == 200) {
+                        progressbar.setVisibility(View.GONE);
                         Log.d("getdata", "dataplant");
                         plantList = response.body();
                         HomeActivityAdapter homeActivityAdapter = new HomeActivityAdapter(getApplicationContext(), plantList, HomeActivity.this);
@@ -67,6 +74,7 @@ public class HomeActivity extends AppCompatActivity {
                         recyclerView.setAdapter(homeActivityAdapter);
 
                     } else {
+                        progressbar.setVisibility(View.GONE);
 
                     }
                 }
@@ -74,6 +82,7 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<PlantInfo>> call, Throwable t) {
+                progressbar.setVisibility(View.GONE);
 
             }
         });

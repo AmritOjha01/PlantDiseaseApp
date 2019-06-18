@@ -1,7 +1,7 @@
 package com.example.navigation;
 
 import android.Manifest;
-import android.app.ProgressDialog;
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,9 +31,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.navigation.model.SaveInfo;
@@ -44,7 +46,9 @@ import com.example.navigation.resrhelper.RetroInterfaceAPI;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -57,13 +61,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int CAMERA_REQUEST_CODE = 102;
     private String pathToFile;
 
-    private String selection;
+    private String selectionStage, selectionPart, selectionLeaf, selectionDate, seletionRate;
     private AutoCompleteTextView mStage, mPart, mLeaf, mRate;
     private ImageView imageStageDrpdown, imgPartDropDown, imgLeafDropDown, imgRateDropDown;
     private LinearLayout layoutStage, layoutPart, layoutLeaf, layoutRate;
-    private ImageView mCamera, imageTomato;
+    private ImageView mCamera, imageTomato, datePicker;
     private Button mSaveBtn;
-    private TextView mTemp, mHumdity, mLabel, mDate, mFarm, mLocation, mComment;
+    private EditText mTemp, mDate, mHumdity, mLabel, mFarm, mLocation, mComment;
+    private int mYear, mMonth, mDay, mHour, mMinute;
+    ProgressBar progressbarEdit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,18 +192,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mCamera = findViewById(R.id.imageCamera);
         mSaveBtn = findViewById(R.id.buttonSave);
         imageTomato = findViewById(R.id.imageTomato);
+        datePicker = findViewById(R.id.datePicker);
+        progressbarEdit=findViewById(R.id.progressbarEdit);
+        progressbarEdit.bringToFront();
 
 
-        mSaveBtn.setOnClickListener(new View.OnClickListener() {
+     /*   mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 callRetrofitSaveInfo();
 
             }
+        });*/
+
+        datePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get Current Date
+                Calendar mcurrentDate = Calendar.getInstance();
+                mYear = mcurrentDate.get(Calendar.YEAR);
+                mMonth = mcurrentDate.get(Calendar.MONTH);
+                mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog mDatePicker = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
+                        Calendar myCalendar = Calendar.getInstance();
+                        myCalendar.set(Calendar.YEAR, selectedyear);
+                        myCalendar.set(Calendar.MONTH, selectedmonth);
+                        myCalendar.set(Calendar.DAY_OF_MONTH, selectedday);
+                        String myFormat = "yyyy-MM-dd"; //Change as you need
+                        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.getDefault());
+                        mDate.setText(sdf.format(myCalendar.getTime()));
+
+                        mDay = selectedday;
+                        mMonth = selectedmonth;
+                        mYear = selectedyear;
+                    }
+                }, mYear, mMonth, mDay);
+                //mDatePicker.setTitle("Select date");
+                mDatePicker.show();
+            }
         });
 
 
     }
+
 
     private void showDropDown() {
         final ArrayAdapter<String> arrayAdapterStage = new ArrayAdapter<>(
@@ -223,12 +263,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         mStage.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 mStage.showDropDown();
-                selection = (String) parent.getItemAtPosition(position);
+                selectionStage = (String) parent.getItemAtPosition(position);
 
             }
         });
@@ -239,7 +278,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 mPart.showDropDown();
-                selection = (String) parent.getItemAtPosition(position);
+                selectionPart = (String) parent.getItemAtPosition(position);
+                Log.d("scndcbhdhdh", selectionPart);
 
             }
         });
@@ -250,7 +290,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 mLeaf.showDropDown();
-                selection = (String) parent.getItemAtPosition(position);
+                selectionLeaf = (String) parent.getItemAtPosition(position);
+                Log.d("cjddbbdhdhd", selectionLeaf);
+
+            }
+        });
+
+        mRate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+                mRate.showDropDown();
+                seletionRate = (String) parent.getItemAtPosition(i);
+                Log.d("dfhddbhdhd", seletionRate);
 
             }
         });
@@ -265,18 +316,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+                callRetrofitSaveInfo();
+                //startActivity(new Intent(MainActivity.this, HomeActivity.class));
             }
         });
 
        /* mRate.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 mRate.showDropDown();
                 selection = (String) parent.getItemAtPosition(position);
-
             }
         });*/
 
@@ -284,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
+
 
     private void cameraOptionDialogue(View view) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -423,23 +474,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+
+        mStage.requestFocus();
+        mRate.requestFocus();
+        mPart.requestFocus();
+        mLeaf.requestFocus();
     }
 
     /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CAMERA_REQUEST_CODE) {
-
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
-
             } else {
-
                 Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
-
             }
-
         }
     }*/
 
@@ -447,33 +497,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void callRetrofitSaveInfo() {
 
         String label = mLabel.getText().toString().trim();
-        String stage = mStage.getText().toString();
-        String part = mPart.getText().toString();
-        String leaf = mLeaf.getText().toString();
         String farm = mFarm.getText().toString();
         String location = mLocation.getText().toString();
         String image = null;
         String comment = mComment.getText().toString();
         String temp = mTemp.getText().toString();
         String humidity = mHumdity.getText().toString();
-        String rate = mRate.getText().toString();
         String date = mDate.getText().toString();
 
-        final SaveResponse saveResponse = new SaveResponse("hello", "early", "Top", "front", "yes", "korea", null, "test", "48", "11", "11", "2018-11-31");
+
+        final SaveResponse saveResponse = new SaveResponse(label, selectionStage, selectionPart, selectionLeaf, farm, location, null, comment, temp, humidity, seletionRate, date);
+        //final SaveResponse saveResponse = new SaveResponse("amrit", "early", "top", "frony", "yes", "korea", null, "shxhsxss", "11", "11", "11", "2018-11-31");
 
         RetroInterfaceAPI mInterface = RestClient.getClient();
-      /*  Call<SaveInfo> call = mInterface.getSaveInfo(mLabel.getText().toString(),
-                mStage.getText().toString(),
-                mPart.getText().toString(),
-                mLeaf.getText().toString(),
-                mFarm.getText().toString(),
-                mLocation.getText().toString(),
-                null,
-                mComment.getText().toString(),
-                mTemp.getText().toString(),
-                mHumdity.getText().toString(),
-                mRate.getText().toString(),
-                mDate.getText().toString());*/
+
 
         Call<SaveInfo> call = mInterface.getSaveInfo(saveResponse);
         call.enqueue(new Callback<SaveInfo>() {
@@ -481,8 +518,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onResponse(Call<SaveInfo> call, Response<SaveInfo> response) {
                 if (response.body() != null) {
                     if (response.code() == 200) {
-                        Log.d("bbddbhhd", "chdbchddhdh");
-                        Toast.makeText(MainActivity.this, "Saved Successfully !", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "saved", Toast.LENGTH_SHORT).show();
+                      startActivity(new Intent(MainActivity.this,HomeActivity.class));
 
                     }
                 }
@@ -491,6 +528,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onFailure(Call<SaveInfo> call, Throwable t) {
+
 
             }
         });
