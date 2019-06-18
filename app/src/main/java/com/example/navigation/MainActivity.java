@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void callRetrofitSaveInfo() {
 
-        String label = mLabel.getText().toString().trim();
+        final String label = mLabel.getText().toString().trim();
         String farm = mFarm.getText().toString();
         String location = mLocation.getText().toString();
         String image = null;
@@ -456,6 +456,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if (response.body() != null) {
                     if (response.code() == 200) {
                         Toast.makeText(MainActivity.this, "Record Saved Successfully", Toast.LENGTH_SHORT).show();
+                        clearData();
                         startActivity(new Intent(MainActivity.this, HomeActivity.class));
 
                     }
@@ -467,6 +468,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+
+    }
+
+    private void clearData(){
+        mLabel.getText().clear();
+        mFarm.getText().clear();
+        mLocation.getText().clear();
+        mLeaf.getText().clear();
+        mPart.getText().clear();
+        mComment.getText().clear();
+        mRate.getText().clear();
+        mDate.getText().clear();
+        mStage.getText().clear();
+        mHumdity.getText().clear();
+        mTemp.getText().clear();
+
 
     }
 
