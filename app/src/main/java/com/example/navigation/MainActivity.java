@@ -70,8 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private EditText mTemp, mDate, mHumdity, mLabel, mFarm, mLocation, mComment;
     private int mYear, mMonth, mDay, mHour, mMinute;
     ProgressBar progressbarEdit;
-    String label,farm,location,image,comment,temp,humidity,date;
-
+    String label, farm, location, image, comment, temp, humidity, date;
 
 
     @Override
@@ -181,7 +180,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
 
-                if (!validateTemp() | !validateHumidity() | !validateLabel() | !validateStage() | !validatePart() | !validateLeaf() | !validateDate() | !validateFarm() | !validatLocation() | !validatRate() ) {
+                if (!validateTemp() |
+                        !validateHumidity() |
+                        !validateLabel() |
+                        !validateStage() |
+                        !validatePart() |
+                        !validateLeaf() |
+                        !validateDate() |
+                        !validateFarm() |
+                        !validatLocation() |
+                        !validatRate()) {
                     return;
 
                 } else {
@@ -269,7 +277,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     int position, long id) {
                 mPart.showDropDown();
                 selectionPart = (String) parent.getItemAtPosition(position);
-                Log.d("scndcbhdhdh", selectionPart);
+                Log.d("Part", selectionPart);
 
             }
         });
@@ -281,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     int position, long id) {
                 mLeaf.showDropDown();
                 selectionLeaf = (String) parent.getItemAtPosition(position);
-                Log.d("cjddbbdhdhd", selectionLeaf);
+                Log.d("Leaf", selectionLeaf);
 
             }
         });
@@ -291,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
                 mRate.showDropDown();
                 seletionRate = (String) parent.getItemAtPosition(i);
-                Log.d("dfhddbhdhd", seletionRate);
+                Log.d("Rate", seletionRate);
 
             }
         });
@@ -449,7 +457,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
     private void callRetrofitSaveInfo() {
 
 
@@ -487,7 +494,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private void clearData(){
+    private void clearData() {
         mLabel.getText().clear();
         mFarm.getText().clear();
         mLocation.getText().clear();
@@ -503,8 +510,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    private boolean validateTemp(){
-        String userInput =  mTemp.getText().toString().trim();
+    private boolean validateTemp() {
+        String userInput = mTemp.getText().toString().trim();
         if (userInput.isEmpty()) {
             mTemp.setError("Field must not be empty");
             return false;
@@ -515,8 +522,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private boolean validateHumidity(){
-        String userInput =  mHumdity.getText().toString().trim();
+    private boolean validateHumidity() {
+        String userInput = mHumdity.getText().toString().trim();
         if (userInput.isEmpty()) {
             mHumdity.setError(" Field must not be empty");
             return false;
@@ -527,8 +534,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private boolean validateLabel(){
-        String userInput =  mLabel.getText().toString().trim();
+    private boolean validateLabel() {
+        String userInput = mLabel.getText().toString().trim();
         if (userInput.isEmpty()) {
             mLabel.setError(" Field must not be empty");
             return false;
@@ -540,9 +547,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
-    private boolean validateStage(){
-        String userInput =  mStage.getText().toString().trim();
+    private boolean validateStage() {
+        String userInput = mStage.getText().toString().trim();
         if (userInput.isEmpty()) {
             mStage.setError("Field must not be empty");
             return false;
@@ -552,8 +558,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
-    private boolean validatePart(){
-        String userInput =  mPart.getText().toString().trim();
+
+    private boolean validatePart() {
+        String userInput = mPart.getText().toString().trim();
         if (userInput.isEmpty()) {
             mPart.setError("Field must not be empty");
             return false;
@@ -564,8 +571,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private boolean validateLeaf(){
-        String userInput =  mLeaf.getText().toString().trim();
+    private boolean validateLeaf() {
+        String userInput = mLeaf.getText().toString().trim();
         if (userInput.isEmpty()) {
             mLeaf.setError("Field must not be empty");
             return false;
@@ -577,8 +584,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private boolean validateDate(){
-        String userInput =  mDate.getText().toString().trim();
+    private boolean validateDate() {
+        String userInput = mDate.getText().toString().trim();
         if (userInput.isEmpty()) {
             mDate.setError("Field must not be empty");
             return false;
@@ -589,8 +596,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private boolean validateFarm(){
-        String userInput =  mFarm.getText().toString().trim();
+    private boolean validateFarm() {
+        String userInput = mFarm.getText().toString().trim();
         if (userInput.isEmpty()) {
             mFarm.setError("Field must not be empty");
             return false;
@@ -600,8 +607,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         }
     }
-    private boolean validatLocation(){
-        String userInput =  mLocation.getText().toString().trim();
+
+    private boolean validatLocation() {
+        String userInput = mLocation.getText().toString().trim();
         if (userInput.isEmpty()) {
             mLocation.setError("Field must not be empty");
             return false;
@@ -613,8 +621,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private boolean validatRate(){
-        String userInput =  mRate.getText().toString().trim();
+    private boolean validatRate() {
+        String userInput = mRate.getText().toString().trim();
         if (userInput.isEmpty()) {
             mRate.setError("Field must not be empty");
             return false;

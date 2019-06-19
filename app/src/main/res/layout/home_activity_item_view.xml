@@ -35,113 +35,103 @@
                 android:src="@drawable/tomato" />
 
             <RelativeLayout
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp"
-                android:layout_toRightOf="@+id/home_activity_item_view_image"
                 android:id="@+id/layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/home_activity_item_view_image"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp">
 
-            <RelativeLayout
-                android:id="@+id/topRelativeLayoout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                <RelativeLayout
+                    android:id="@+id/topRelativeLayoout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <com.example.navigation.customcomponents.LatoTextView
-                    android:id="@+id/humidity"
-                    android:layout_width="wrap_content"
+                    <com.example.navigation.customcomponents.LatoTextView
+                        android:id="@+id/humidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:baselineAligned="false"
+                        android:elevation="0dp"
+                        android:padding="3dp"
+                        android:text="Humidity"
+                        android:textSize="14sp"
+                        text_view:textStyle1="Bold" />
+
+                    <com.example.navigation.customcomponents.LatoTextView
+                        android:id="@+id/home_activity_item_view_humidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/humidity"
+                        android:elevation="0dp"
+                        android:padding="3dp"
+                        android:text="Item View"
+                        android:textSize="14sp"
+                        text_view:textStyle1="Bold" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/bottomRelativeLayoout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
-                    android:baselineAligned="false"
-                    android:elevation="0dp"
-                    android:padding="3dp"
-                    android:text="Humidity"
-                    android:textSize="14sp"
-                    text_view:textStyle1="Bold" />
+                    android:layout_below="@+id/topRelativeLayoout">
 
-                <com.example.navigation.customcomponents.LatoTextView
-                    android:id="@+id/home_activity_item_view_humidity"
-                    android:layout_width="wrap_content"
+                    <com.example.navigation.customcomponents.LatoTextView
+                        android:id="@+id/tempeature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="16dp"
+                        android:baselineAligned="false"
+                        android:elevation="0dp"
+                        android:padding="3dp"
+                        android:text="Temperature"
+                        android:textSize="14sp"
+                        text_view:textStyle1="Bold" />
+
+                    <com.example.navigation.customcomponents.LatoTextView
+                        android:id="@+id/home_activity_item_view_temp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/tempeature"
+                        android:elevation="0dp"
+                        android:padding="3dp"
+                        android:text="Item View"
+                        android:textSize="14sp"
+                        text_view:textStyle1="Bold" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/humidity"
-                    android:elevation="0dp"
-                    android:padding="3dp"
-                    android:text="Item View"
-                    android:textSize="14sp"
-                    text_view:textStyle1="Bold" />
+                    android:layout_below="@+id/bottomRelativeLayoout">
 
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_below="@+id/topRelativeLayoout"
-                android:id="@+id/bottomRelativeLayoout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <com.example.navigation.customcomponents.LatoTextView
-                    android:id="@+id/tempeature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
-                    android:baselineAligned="false"
-                    android:elevation="0dp"
-                    android:padding="3dp"
-                    android:text="Temperature"
-                    android:textSize="14sp"
-                    text_view:textStyle1="Bold" />
-
-                <com.example.navigation.customcomponents.LatoTextView
-                    android:id="@+id/home_activity_item_view_temp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/tempeature"
-                    android:elevation="0dp"
-                    android:padding="3dp"
-                    android:text="Item View"
-                    android:textSize="14sp"
-                    text_view:textStyle1="Bold" />
+                    <ImageView
+                        android:id="@+id/delete"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_toStartOf="@+id/edit"
+                        android:src="@drawable/cross" />
 
 
-            </RelativeLayout>
-
-            <RelativeLayout
-
-                android:layout_below="@+id/bottomRelativeLayoout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-
-                <ImageView
-                    android:layout_marginRight="16dp"
-                    android:layout_toStartOf="@+id/edit"
-                    android:src="@drawable/delete"
-                    android:id="@+id/delete"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp" />
-
-
-                <ImageView
-                    android:layout_marginRight="16dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/editother"
-                    android:id="@+id/edit"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp" />
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/edit"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="16dp"
+                        android:src="@drawable/update" />
+                </RelativeLayout>
 
             </RelativeLayout>
 
         </RelativeLayout>
-
-
-        <!--<View
-            android:layout_width="match_parent"
-            android:layout_height="0.4dp"
-            android:layout_marginTop="8dp"
-            android:alpha="0.3"
-            android:background="#474747" />-->
 
     </android.support.v7.widget.CardView>
 

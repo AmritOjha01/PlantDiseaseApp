@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +47,10 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-
-
+        //  Glide.with(context).load(judgeData.getImage()).into(holder.imageView);
         holder.temp.setText(plantInfos.get(position).getTemperature());
         holder.humidity.setText(plantInfos.get(position).getHumidity());
+
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,8 +59,7 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        deleteData(position);
-
+                        deleteShowDialog(position);
                     }
 
                     @Override
@@ -74,31 +70,62 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
             }
         });
 
+        holder.edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RetroInterfaceAPI mInterfaces = RestClient.getClient();
+                Call<ResponseBody> call = mInterfaces.updateData(plantInfos.get(position).getId());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        updateShowDialog(position);
+                    }
 
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-
-        //  Glide.with(context).load(judgeData.getImage()).into(holder.imageView);
-
+                    }
+                });
+            }
+        });
     }
 
-    public void showDialog(final String phone) throws Exception {
+    public void deleteShowDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure want to delete ");
 
-        builder.setMessage("Are you sure want to delete? " + phone);
-
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which){
-
-
-
-                dialog.dismiss();
+            public void onClick(DialogInterface dialog, int which) {
+                deleteData(position);
             }
         });
 
-        builder.setNegativeButton("Abort", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("Abort", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which){
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    public void updateShowDialog(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Are you sure want to Update ");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(context, "Update Functionality !", Toast.LENGTH_SHORT).show();
+                updateData(position);
+
+            }
+        });
+
+        builder.setNegativeButton("Abort", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
@@ -110,15 +137,33 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
         return plantInfos.size();
     }
 
-    public void deleteData(int position) { //removes the row
+    /**
+     * REMOVES THE ROWS:
+     *
+     * @param position
+     */
+    public void deleteData(int position) {
         plantInfos.remove(position);
         notifyItemRemoved(position);
     }
 
 
+    /**
+     * UPDATE THE ROWS:
+     *
+     * @param position
+     */
+    private void updateData(int position) {
+
+        /**
+         * Write Business Logic Here @ElishDhungana
+         */
+    }
+
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView humidity, temp;
-        ImageView imageView,delete,edit;
+        ImageView imageView, delete, edit;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -127,9 +172,6 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
             imageView = itemView.findViewById(R.id.home_activity_item_view_image);
             delete = itemView.findViewById(R.id.delete);
             edit = itemView.findViewById(R.id.edit);
-
-
-
 
         }
     }

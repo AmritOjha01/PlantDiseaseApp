@@ -79,9 +79,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
     private void callRetrofitDelete() {
         progressbar.setVisibility(View.VISIBLE);
-
         RetroInterfaceAPI mInterface = RestClient.getClient();
         Call<ResponseBody> call = mInterface.deleteData("7");
         call.enqueue(new Callback<ResponseBody>() {
