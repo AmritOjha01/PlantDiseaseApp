@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private EditText mTemp, mDate, mHumdity, mLabel, mFarm, mLocation, mComment;
     private int mYear, mMonth, mDay, mHour, mMinute;
     ProgressBar progressbarEdit;
+    String label,farm,location,image,comment,temp,humidity,date;
+
 
 
     @Override
@@ -178,7 +180,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSaveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callRetrofitSaveInfo();
+
+                if (!validateTemp() | !validateHumidity() | !validateLabel() | !validateStage() | !validatePart() | !validateLeaf() | !validateDate() | !validateFarm() | !validatLocation() | !validatRate() ) {
+                    return;
+
+                } else {
+                    try {
+                        callRetrofitSaveInfo();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
 
             }
         });
@@ -434,17 +448,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mLeaf.requestFocus();
     }
 
+
+
     private void callRetrofitSaveInfo() {
 
-        final String label = mLabel.getText().toString().trim();
-        String farm = mFarm.getText().toString();
-        String location = mLocation.getText().toString();
-        String image = null;
-        String comment = mComment.getText().toString();
-        String temp = mTemp.getText().toString();
-        String humidity = mHumdity.getText().toString();
-        String date = mDate.getText().toString();
 
+        label = mLabel.getText().toString().trim();
+        farm = mFarm.getText().toString();
+        location = mLocation.getText().toString();
+        image = null;
+        comment = mComment.getText().toString();
+        temp = mTemp.getText().toString();
+        humidity = mHumdity.getText().toString();
+        date = mDate.getText().toString();
         final SaveResponse saveResponse = new SaveResponse(label, selectionStage, selectionPart, selectionLeaf, farm, location, null, comment, temp, humidity, seletionRate, date);
 
         RetroInterfaceAPI mInterface = RestClient.getClient();
@@ -487,4 +503,125 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    private boolean validateTemp(){
+        String userInput =  mTemp.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mTemp.setError("Field must not be empty");
+            return false;
+        } else {
+            mTemp.setError(null);
+            return true;
+
+        }
+    }
+
+    private boolean validateHumidity(){
+        String userInput =  mHumdity.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mHumdity.setError(" Field must not be empty");
+            return false;
+        } else {
+            mHumdity.setError(null);
+            return true;
+
+        }
+    }
+
+    private boolean validateLabel(){
+        String userInput =  mLabel.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mLabel.setError(" Field must not be empty");
+            return false;
+        } else {
+            mLabel.setError(null);
+            return true;
+
+        }
+    }
+
+
+
+    private boolean validateStage(){
+        String userInput =  mStage.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mStage.setError("Field must not be empty");
+            return false;
+        } else {
+            mStage.setError(null);
+            return true;
+
+        }
+    }
+    private boolean validatePart(){
+        String userInput =  mPart.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mPart.setError("Field must not be empty");
+            return false;
+        } else {
+            mPart.setError(null);
+            return true;
+
+        }
+    }
+
+    private boolean validateLeaf(){
+        String userInput =  mLeaf.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mLeaf.setError("Field must not be empty");
+            return false;
+        } else {
+            mLeaf.setError(null);
+            return true;
+
+        }
+    }
+
+
+    private boolean validateDate(){
+        String userInput =  mDate.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mDate.setError("Field must not be empty");
+            return false;
+        } else {
+            mDate.setError(null);
+            return true;
+
+        }
+    }
+
+    private boolean validateFarm(){
+        String userInput =  mFarm.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mFarm.setError("Field must not be empty");
+            return false;
+        } else {
+            mFarm.setError(null);
+            return true;
+
+        }
+    }
+    private boolean validatLocation(){
+        String userInput =  mLocation.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mLocation.setError("Field must not be empty");
+            return false;
+        } else {
+            mLocation.setError(null);
+            return true;
+
+        }
+    }
+
+
+    private boolean validatRate(){
+        String userInput =  mRate.getText().toString().trim();
+        if (userInput.isEmpty()) {
+            mRate.setError("Field must not be empty");
+            return false;
+        } else {
+            mRate.setError(null);
+            return true;
+
+        }
+    }
 }

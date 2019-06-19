@@ -18,6 +18,7 @@ import com.example.navigation.utils.Utils;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,10 +44,11 @@ public class HomeActivity extends AppCompatActivity {
         Utils.toolbarConfiguration(toolbar, this);
 
         recyclerView = findViewById(R.id.recycleview);
-        callRetrofitShowJudges();
+        callRetrofitShowData();
+        //callRetrofitDelete();
     }
 
-    private void callRetrofitShowJudges() {
+    private void callRetrofitShowData() {
         progressbar.setVisibility(View.VISIBLE);
 
         RetroInterfaceAPI mInterface = RestClient.getClient();
@@ -77,5 +79,22 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+    private void callRetrofitDelete() {
+        progressbar.setVisibility(View.VISIBLE);
 
+        RetroInterfaceAPI mInterface = RestClient.getClient();
+        Call<ResponseBody> call = mInterface.deleteData("7");
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+    }
 }

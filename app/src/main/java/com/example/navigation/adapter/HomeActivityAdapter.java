@@ -1,7 +1,11 @@
 package com.example.navigation.adapter;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,11 +13,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.navigation.R;
 import com.example.navigation.model.PlantInfo;
+import com.example.navigation.resrhelper.RestClient;
+import com.example.navigation.resrhelper.RetroInterfaceAPI;
 
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapter.MyViewHolder> {
@@ -37,16 +49,60 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
 
         holder.temp.setText(plantInfos.get(position).getTemperature());
         holder.humidity.setText(plantInfos.get(position).getHumidity());
-        Log.d("cdhcdhdhcdhd",plantInfos.get(position).getLabel());
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RetroInterfaceAPI mInterface = RestClient.getClient();
+                Call<ResponseBody> call = mInterface.deleteData(plantInfos.get(position).getId());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        deleteData(position);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
+
+
 
 
         //  Glide.with(context).load(judgeData.getImage()).into(holder.imageView);
 
+    }
+
+    public void showDialog(final String phone) throws Exception {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+        builder.setMessage("Are you sure want to delete? " + phone);
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+
+
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Abort", new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which){
+                dialog.dismiss();
+            }
+        });
+        builder.show();
     }
 
     @Override
@@ -54,16 +110,29 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
         return plantInfos.size();
     }
 
+    public void deleteData(int position) { //removes the row
+        plantInfos.remove(position);
+        notifyItemRemoved(position);
+    }
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView humidity, temp;
-        ImageView imageView;
+        ImageView imageView,delete,edit;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             humidity = itemView.findViewById(R.id.home_activity_item_view_humidity);
             temp = itemView.findViewById(R.id.home_activity_item_view_temp);
             imageView = itemView.findViewById(R.id.home_activity_item_view_image);
+            delete = itemView.findViewById(R.id.delete);
+            edit = itemView.findViewById(R.id.edit);
+
+
+
+
         }
     }
+
+
 }
