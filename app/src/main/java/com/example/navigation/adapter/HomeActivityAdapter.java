@@ -97,6 +97,7 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(context, "Deleted Successfully !" + position, Toast.LENGTH_SHORT).show();
                 deleteData(position);
             }
         });
@@ -117,7 +118,7 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(context, "Update Functionality !", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Update Functionality !" + position, Toast.LENGTH_SHORT).show();
                 updateData(position);
 
             }
