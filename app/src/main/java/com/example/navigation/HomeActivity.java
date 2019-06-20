@@ -45,7 +45,6 @@ public class HomeActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recycleview);
         callRetrofitShowData();
-        //callRetrofitDelete();
     }
 
     private void callRetrofitShowData() {
