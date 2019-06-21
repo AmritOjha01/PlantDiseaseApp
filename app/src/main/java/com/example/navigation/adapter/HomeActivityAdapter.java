@@ -94,7 +94,7 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Are you sure want to delete ");
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(context, "Deleted Successfully !" + position, Toast.LENGTH_SHORT).show();
@@ -102,7 +102,7 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
             }
         });
 
-        builder.setNegativeButton("Abort", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -115,7 +115,7 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage("Are you sure want to Update ");
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Toast.makeText(context, "Update Functionality !" + position, Toast.LENGTH_SHORT).show();
@@ -124,7 +124,7 @@ public class HomeActivityAdapter extends RecyclerView.Adapter<HomeActivityAdapte
             }
         });
 
-        builder.setNegativeButton("Abort", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
